@@ -21,7 +21,6 @@
 
 .word{
     white-space: nowrap;
-    display: inline-block;
     margin-right: 0.45em;
 }
 
@@ -33,7 +32,7 @@
 
 .char.current{
     opacity: 0.35;
-    border-left: 4px solid #b2801c;
+    box-shadow: -4px 0 0 #b2801c;
 }
 
 .char.correct{
@@ -43,6 +42,7 @@
 .char.wrong{
     opacity: 1;
     color: #871e17;
+    box-shadow: 0 4px 0 #871e17;
 }
 
 .mode-switcher {
