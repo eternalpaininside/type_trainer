@@ -5,13 +5,16 @@
 
 .main-stats {
     float: left;
-    width: 120px;
+    display: flex;
+    flex-direction: column;
+
+    gap: 50px;
 }
 
 .stat-title {
     font-size: 28px;
     font-weight: bold;
-    color: #666
+    color: #5c5e60;
 }
 
 .stat-value {
@@ -22,15 +25,15 @@
 }
 
 .chart {
-    margin-left: 140px;
-    height: 220px;
+    margin-left: 180px;
+    height: 250px;
     border: 1px solid #d59321;
 }
 
 .other-stats {
     clear: both;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 40px;
     margin-top: 40px;
 

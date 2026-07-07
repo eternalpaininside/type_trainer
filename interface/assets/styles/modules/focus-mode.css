@@ -12,3 +12,8 @@
 #settings-panel {
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
+
+#generate{
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-align: center;
+}
