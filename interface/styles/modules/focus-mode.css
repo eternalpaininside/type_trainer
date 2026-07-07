@@ -1,0 +1,14 @@
+.hidden {
+    display: none;
+}
+
+.focus-mode {
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    transform: translateY(-10px);
+}
+
+#settings-panel {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
