@@ -1,40 +1,17 @@
-const languages = {
-    ru : [ "дом", "время", "человек", "работа", "день", "рука", "слово", "место",
-        "жизнь", "глаз", "город", "вопрос", "сторона", "страна", "мир", "случай",
-        "голова", "ребенок", "сила", "конец", "вид", "система", "часть", "ночь",
-        "стол", "книга", "вода", "окно", "машина", "улица", "школа", "письмо",
-        "мысль", "дорога", "друг", "голос", "сердце", "свет", "номер", "игра",
-        "проект", "код", "сервер", "кнопка", "экран", "ошибка", "данные", "сайт",
-    ],
-    en : ["dog", "time", "human", "work", "day", "hand", "word", "place",
-        "life", "eye", "city", "question", "side", "country", "world", "chance",
-        "head", "child", "power", "end", "view", "system", "part", "night",
-        "table", "book", "water", "window", "car", "street", "school", "letter",
-        "road", "other", "voice", "heart", "light", "number", "game", "project",
-        "code", "server", "button", "screen", "error", "data", "site"],
-    go : [ "append", "var", "delete", "type", "struct"]
-}
+import {chances, languages, punctation, texts} from "./config.js";
+import {states} from "./states.js";
 
-const punctation = [".", ",", "!", "?", ":", ";"];
-
-const numberChance = 0.2;
-const punctuationChance = 0.2;
-const capitalChance = 0.2;
-const fourthNumberChance = 0.1;
-const negativeNumberChance = 0.1;
-
-export const createRandomText = (wordCount = 25, lang = "ru", toggle = []) => {
-    let length = 0;
-    if (wordCount === 0){
-        length = 25;
-    }else {
-        length = wordCount;
-    }
-
+export const createRandomText = () => {
+    let length = states.settings.mode === 'words'
+        ? states.settings.words : 25;
     let wordsSinceLastNumber = 0;
     const words = [];
+
+    if (states.settings.mode === 'text'){
+        return texts[states.settings.language][states.settings.text][ Math.floor(Math.random() * texts[states.settings.language][states.settings.text].length)];
+    }
     for (let i = 0; i < length; i++) {
-        if (toggle.includes("numbers") && Math.random() < numberChance && !(wordsSinceLastNumber < 2)) {
+        if (states.settings.toggles.includes("numbers") && Math.random() < chances.numberChance && !(wordsSinceLastNumber < 2)) {
             if (i !== 0){
                 wordsSinceLastNumber = 0;
                 words.push(generateRandomNumber());
@@ -42,11 +19,13 @@ export const createRandomText = (wordCount = 25, lang = "ru", toggle = []) => {
             }
         }
 
-        let word = languages[lang][Math.floor(Math.random() * languages[lang].length)];
-        if (toggle.includes("punctuations") && Math.random() < punctuationChance) {
+        let word = languages[states.settings.language][Math.floor(
+            Math.random() * languages[states.settings.language].length,
+            )];
+        if (states.settings.toggles.includes("punctuations") && Math.random() < chances.punctuationChance) {
             word += punctation[Math.floor(Math.random() * punctation.length)];
         }
-        if (toggle.includes("capitals") && Math.random() < capitalChance) {
+        if (states.settings.toggles.includes("capitals") && Math.random() < chances.capitalChance) {
             word = word.charAt(0).toUpperCase() + word.slice(1);
         }
         wordsSinceLastNumber++;
@@ -65,10 +44,10 @@ function generateRandomNumber() {
         else
             number += String(randInt());
     }
-    if (Math.random() < fourthNumberChance) {
+    if (Math.random() < chances.fourthNumberChance) {
         number += String(randInt());
     }
-    if (Math.random() < negativeNumberChance) {
+    if (Math.random() < chances.negativeNumberChance) {
         number = "-" + number;
     }
 
@@ -76,5 +55,5 @@ function generateRandomNumber() {
 }
 
 function randInt(){
-    return Math.floor( Math.random() * 10 );
+    return Math.floor( Math.random() * 9 );
 }

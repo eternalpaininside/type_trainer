@@ -1,34 +1,13 @@
-import { createRandomText } from "./text.js";
-
-export const states = {
-    currentMode: 'time',
-    currentToggle: [],
-
-    selectedTime: 30,
-    selectedWords: 25,
-
-    currentIndex: 0,
-    currentText: createRandomText(25, "en"),
-    typedText: '',
-
-    counterId: null,
-    settingsTimeoutId: null,
-    currentCountErrors: 0,
-    errors: 0,
-    typedCount: 0,
-    timeLeft: 0,
-
-    isStarted: false,
-    isFinished: false,
-};
-
 const element = (token) => document.getElementById(token);
 
 export const elements = {
     gameScreen : element('game-screen'),
     valueSwitcherElement : element('value-switcher'),
+    toggleSwitcherElement : element('toggle-switcher'),
 
-    languageSelectElement : element('language-select'),
+    selectTriggerElement : element('select-trigger'),
+    selectMenuElement : element('select-menu'),
+    currentLanguageElement : element('current-language'),
     counterElement : element('counter'),
     textElement : element('text'),
     generateElement : element('generate'),
@@ -43,5 +22,5 @@ export const elements = {
     timeElement : element('time'),
     statsElement : element('stats'),
 
-    resetButton : element('restart'),
+    restartButton : element('restart'),
 };

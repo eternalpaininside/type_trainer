@@ -1,7 +1,17 @@
-import {states, elements} from "./objects.js";
+import {states} from "./states.js";
+import {elements} from "./dom.js";
 import {enterFocusMode} from "./focus-mode.js";
 import {renderText, renderValueSwitcher} from "./render.js";
-import {startTimer, startCounter, finishTraining, resetTraining} from "./training.js";
+import {
+    startTimer,
+    startCounter,
+    finishTraining,
+    resetTraining,
+    setToggle,
+    setMode,
+    setValue,
+    restartGame
+} from "./training.js";
 import {createRandomText} from "./text.js";
 
 const modeSwitcher = document.querySelectorAll('[data-mode]');
@@ -10,12 +20,11 @@ modeSwitcher.forEach(function (buttonMode) {
         modeSwitcher.forEach(function (modeSwitcherElement) {
             modeSwitcherElement.classList.remove('active');
         });
-
         buttonMode.classList.add('active');
-        states.currentMode = buttonMode.dataset.mode;
 
-        resetTraining();
+        setMode(buttonMode.dataset.mode);
         renderValueSwitcher();
+        renderText();
     });
 });
 
@@ -24,113 +33,141 @@ toggleSwitcher.forEach(function (buttonToggle) {
     buttonToggle.addEventListener('click', function () {
 
         buttonToggle.classList.toggle('active');
-        if (buttonToggle.classList.contains('active')){
-            states.currentToggle.push(buttonToggle.dataset.toggle);
-        }else{
-            states.currentToggle = states.currentToggle.filter(function (toggle) {
-                return toggle !== buttonToggle.dataset.toggle;
-            });
-        }
 
-        resetTraining();
+        setToggle(buttonToggle.dataset.toggle)
         renderValueSwitcher();
+        renderText();
     });
 });
 
-function handleKeyDown(event) {
+elements.valueSwitcherElement.addEventListener('click', function (event) {
+    const button = event.target.closest('button');
+
+    if (button === null){
+        return;
+    }
+    setValue(button)
+    renderValueSwitcher();
+    renderText();
+});
+
+elements.restartButton.addEventListener('click', function() {
+    document.querySelector('[data-mode="' + states.settings.mode + '"]').classList.remove('active');
+
+    restartGame();
+    renderValueSwitcher();
+    renderText();
+
+    document.querySelector('[data-mode="' + states.settings.mode + '"]').classList.add('active');
+
+    elements.counterElement.textContent = "";
+    elements.resultsScreen.classList.add('hidden');
+    elements.gameScreen.classList.remove('hidden');
+
+    for (let i = 0; i < elements.toggleSwitcherElement.children.length; i++) {
+        elements.toggleSwitcherElement.children[i].classList.remove('active');
+    }
+});
+
+document.addEventListener('keydown', function (event) {
     if (event.key === ' '){
         event.preventDefault();
     }
     if (event.key === 'Backspace'){
-        if (states.currentIndex === 0){
+        if (states.test.index === 0){
             return;
         }
 
         const chars = elements.textElement.querySelectorAll('.char');
-        chars[states.currentIndex].classList.remove('current');
-        states.typedText = states.typedText.slice(0, states.typedText.length - 1);
+        chars[states.test.index].classList.remove('current');
 
-        states.currentIndex--;
+        states.test.typedTextLength--;
+        states.test.index--;
 
-        if (chars[states.currentIndex].classList.contains('wrong')){
-            states.currentCountErrors--;
+        if (chars[states.test.index].classList.contains('wrong')){
+            states.test.currentCountErrors--;
         }
 
-        chars[states.currentIndex].classList.remove('wrong');
-        chars[states.currentIndex].classList.remove('correct');
-        chars[states.currentIndex].classList.add('current');
+        chars[states.test.index].classList.remove('wrong');
+        chars[states.test.index].classList.remove('correct');
+        chars[states.test.index].classList.add('current');
 
-        states.typedCount--;
+        states.test.typedCount--;
         return;
     }
 
     if (event.key.length !== 1){
         return;
     }
-    if (states.isFinished){
+    if (states.test.isFinished){
         return;
     }
-    if (!states.isStarted){
-        states.isStarted = true;
-        if (states.currentMode === 'time'){
+    if (!states.test.isStarted){
+        states.test.isStarted = true;
+        if (states.settings.mode === 'time'){
             startTimer()
-        }else if (states.currentMode === 'words'){
+        }else if (states.settings.mode === 'words' || states.settings.mode === 'text'){
             startCounter()
         }
     }
 
     enterFocusMode();
     const typedChar = event.key;
-    states.typedText += typedChar;
-    const expectedChar = states.currentText[states.currentIndex];
+    const expectedChar = states.test.text[states.test.index];
 
     const chars = elements.textElement.querySelectorAll('.char');
-    let currentCharElement = chars[states.currentIndex];
+    let currentCharElement = chars[states.test.index];
 
-    states.typedCount++;
+    states.test.typedCount++;
+    states.test.typedTextLength++;
 
     currentCharElement.classList.remove('current');
     if (typedChar === expectedChar){
         currentCharElement.classList.add('correct');
     }else{
-        states.errors++;
-        states.currentCountErrors++;
+        states.test.errors++;
+        states.test.currentCountErrors++;
         currentCharElement.classList.add('wrong');
     }
 
-    states.currentIndex++;
+    states.test.index++;
 
-    if (states.currentIndex >= states.currentText.length){
-        if (states.currentMode === 'time'){
-            const newText = createRandomText(0,
-                elements.languageSelectElement.value,
-                states.currentToggle);
-            const oldLength = states.currentText.length;
-            states.currentText += " " + newText;
+    if (states.test.index >= states.test.text.length){
+        if (states.settings.mode === 'time'){
+            const newText = createRandomText();
+            const oldLength = states.test.text.length;
+            states.test.text += " " + newText;
             renderText(newText, oldLength);
-        }else if (states.currentMode === 'words'){
+        }else if (states.settings.mode === 'words' || states.settings.mode === 'text'){
             finishTraining();
         }
         return;
     }
 
-    chars[states.currentIndex].classList.add('current');
-}
-
-elements.resetButton.addEventListener('click', function() {
-    resetTraining();
-    elements.counterElement.textContent = "";
-
-    elements.resultsScreen.classList.add('hidden');
-    elements.gameScreen.classList.remove('hidden');
+    chars[states.test.index].classList.add('current');
 });
 
 elements.generateElement.addEventListener('click', function () {
     resetTraining();
+    renderText();
 });
 
-document.addEventListener('keydown', handleKeyDown);
+elements.selectTriggerElement.addEventListener('click', function () {
+    elements.selectMenuElement.classList.remove('close-mode');
+    document.addEventListener('click', function (event) {
+        if (event.target !== elements.selectTriggerElement.children[0] &&
+        event.target !== elements.selectTriggerElement.children[1]){
+            elements.selectMenuElement.classList.add('close-mode');
+        }
+    });
+});
 
-elements.languageSelectElement.addEventListener('change', function () {
-    resetTraining();
+const languageOptions = document.querySelectorAll('[data-language]');
+languageOptions.forEach(function (option) {
+    option.addEventListener('click', function () {
+        states.settings.language = option.dataset.language;
+        elements.currentLanguageElement.textContent = option.textContent;
+        resetTraining();
+        renderText();
+    });
 });

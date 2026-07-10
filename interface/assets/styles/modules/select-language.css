@@ -1,0 +1,28 @@
+.select-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.4;
+
+    padding: 12px 20px;
+    margin: 20px auto;
+    background: #3a3936;
+
+    box-sizing: border-box;
+}
+
+.select-menu {
+    background: #2f2e2c;
+    position: absolute;
+    top: 24%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    z-index: 1;
+}

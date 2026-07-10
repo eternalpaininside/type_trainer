@@ -1,41 +1,57 @@
-import {states, elements} from "./objects.js";
-
-const modeValues = {
-    time: [15, 30, 60, 120],
-    words: [10, 25, 50, 100]
-};
+import {states} from "./states.js";
+import {elements} from "./dom.js";
+import {modeValues} from "./config.js";
 
 export function renderValueSwitcher() {
     elements.valueSwitcherElement.innerHTML = '';
+    const values = modeValues[states.settings.mode];
 
-    const values = modeValues[states.currentMode];
     values.forEach(function (value) {
         const button = document.createElement('button');
 
         button.classList.add('btn-mode');
         button.textContent = String(value);
 
-        if (states.currentMode === 'time') {
+        if (states.settings.mode === 'time') {
+            elements.toggleSwitcherElement.classList.remove('hidden');
             button.dataset.time = String(value);
-            if (value === states.selectedTime){
+
+            if (value === states.settings.time){
                 button.classList.add('active');
             }
-        } else if (states.currentMode === 'words'){
+        } else if (states.settings.mode === 'words'){
+            elements.toggleSwitcherElement.classList.remove('hidden');
             button.dataset.words = String(value);
-            if (value === states.selectedWords){
+
+            if (value === states.settings.words){
+                button.classList.add('active');
+            }
+        } else if (states.settings.mode === 'text'){
+            states.settings.toggles = [];
+            elements.toggleSwitcherElement.classList.add('hidden');
+            button.dataset.text = String(value);
+
+            if (value === states.settings.text){
                 button.classList.add('active');
             }
         }
 
+
         button.addEventListener('click', function () {
             button.classList.add('active');
 
-            if (states.currentMode === 'time') {
-                states.selectedTime = value;
-                states.selectedWords = 25;
-            }else if (states.currentMode === 'words'){
-                states.selectedWords = value;
-                states.selectedTime = 30;
+            if (states.settings.mode === 'time') {
+                states.settings.time = value;
+                states.settings.words = 25;
+                states.settings.text = 'medium';
+            }else if (states.settings.mode === 'words'){
+                states.settings.words = value;
+                states.settings.time = 30;
+                states.settings.text = 'medium';
+            }else if (states.settings.mode === 'text'){
+                states.settings.text = value;
+                states.settings.time = 30;
+                states.settings.words = 25;
             }
 
             renderValueSwitcher();
@@ -45,16 +61,18 @@ export function renderValueSwitcher() {
     });
 }
 
-export function renderText(text = "", startIndex = 0) {
+export function renderText() {
     let globalIndex = 0;
-    let newText;
-    if (text !== ""){
-        globalIndex = startIndex;
-        newText = text;
-    }else{
-        elements.textElement.innerHTML = '';
-        newText = states.currentText;
+    let newText = states.test.text;
+    elements.textElement.innerHTML = '';
+
+
+    if (elements.textElement.textContent === ""){
+        globalIndex = 0;
+    } else {
+        globalIndex = elements.textElement.textContent.length;
     }
+
     const words = newText.split(' ');
 
     for (let i = 0; i < words.length; i++) {
@@ -66,7 +84,7 @@ export function renderText(text = "", startIndex = 0) {
             spanChar.textContent = word[j];
             spanChar.classList.add('char');
 
-            if (globalIndex === states.currentIndex){
+            if (globalIndex === states.test.index){
                 spanChar.classList.add('current');
             }
 
@@ -83,6 +101,7 @@ export function renderText(text = "", startIndex = 0) {
 
         elements.textElement.appendChild(spanWord);
     }
+
 }
 
 function addSpace(word, index) {
@@ -90,7 +109,7 @@ function addSpace(word, index) {
     space.textContent = '\u00A0';
     space.classList.add('char');
 
-    if (index === states.currentIndex){
+    if (index === states.test.index){
         space.classList.add('current');
     }
 

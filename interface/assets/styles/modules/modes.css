@@ -17,3 +17,10 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
     text-align: center;
 }
+
+.close-mode {
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    transform: translateY(10px);
+}

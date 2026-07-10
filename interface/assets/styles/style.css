@@ -1,4 +1,5 @@
 @import "modules/base.css";
 @import "modules/game-screen.css";
 @import "modules/result-screen.css";
-@import "modules/focus-mode.css";
+@import "modules/modes.css";
+@import "modules/select-language.css";

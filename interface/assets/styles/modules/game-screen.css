@@ -48,13 +48,17 @@
 .mode-switcher {
     display: flex;
     justify-content: center;
-    margin: 20px auto;
+    align-items: stretch;
+    width: min(1000px, 90vw);
 
+    margin: 20px -30px;
     gap: 10px;
 }
 
 .group-btn {
     background: #2f2e2c;
+    display: flex;
+    flex-wrap: nowrap;
 
     padding: 5px;
     border-radius: 10px;
@@ -77,14 +81,24 @@ button {
     opacity: 0.4;
 }
 
-button:hover {
-    color: #d59321;
-    opacity: 0.8;
+.btn-mode {
+    transition: opacity 0.2s ease;
+    align-items: center;
+    gap: 5px;
+    display: inline-flex;
 }
 
-button.btn-mode.active {
-    opacity: 0.8;
+.btn-mode svg{
+    stroke: currentColor;
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+button.btn-mode.active,
+button:hover{
     color: #d59321;
+    opacity: 0.8;
 }
 
 select {
@@ -106,8 +120,9 @@ select:hover {
     border-color: #3a3936;
 }
 
-select:focus,
 button:focus,
 input:focus {
     outline: none;
 }
+
+

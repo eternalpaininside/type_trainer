@@ -15,40 +15,61 @@
         <div id="game-screen">
             <div id="settings-panel">
                 <div class="mode-switcher">
-                    <div class="group-btn">
-                        <button class="btn-mode" data-toggle="punctuations">punctuations</button>
-                        <button class="btn-mode" data-toggle="numbers">numbers</button>
-                        <button class="btn-mode" data-toggle="capitals">capitals</button>
+                    <div class="group-btn" id="toggle-switcher">
+                        <button class="btn-mode" data-toggle="punctuations">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-section-icon lucide-section"><path d="M16 5a4 3 0 0 0-8 0c0 4 8 3 8 7a4 3 0 0 1-8 0"/><path d="M8 19a4 3 0 0 0 8 0c0-4-8-3-8-7a4 3 0 0 1 8 0"/></svg>
+                            punctuations
+                        </button>
+
+                        <button class="btn-mode" data-toggle="numbers">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hash-icon lucide-hash"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/></svg>
+                            numbers
+                        </button>
+
+                        <button class="btn-mode" data-toggle="capitals">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-az-icon lucide-arrow-up-a-z"><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="M20 8h-5"/><path d="M15 10V6.5a2.5 2.5 0 0 1 5 0V10"/><path d="M15 14h5l-5 6h5"/></svg>
+                            capitals
+                        </button>
                     </div>
 
                     <div class="group-btn">
-                        <button class="btn-mode active" data-mode="time">time</button>
-                        <button class="btn-mode" data-mode="words">words</button>
+                        <button class="btn-mode active" data-mode="time">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            time
+                        </button>
+
+                        <button class="btn-mode" data-mode="words">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pilcrow-icon lucide-pilcrow"><path d="M13 4v16"/><path d="M17 4v16"/><path d="M19 4H9.5a4.5 4.5 0 0 0 0 9H13"/></svg>
+                            words
+                        </button>
+
+                        <button class="btn-mode" data-mode="text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-text-initial-icon lucide-text-initial"><path d="M15 5h6"/><path d="M15 12h6"/><path d="M3 19h18"/><path d="m3 12 3.553-7.724a.5.5 0 0 1 .894 0L11 12"/><path d="M3.92 10h6.16"/></svg>
+                            text
+                        </button>
                     </div>
 
                     <div class="group-btn" id="value-switcher"></div>
                 </div>
 
-                <label for="language-select"></label>
-                <select name="mode" id="language-select">
-                    <option value="en">English</option>
-                    <option value="ru">Russian</option>
-                    <option value="go">Code go</option>
-                </select>
+                <div class="language-select">
+                    <button class="select-trigger" id="select-trigger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-earth-icon lucide-earth"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"/><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"/><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"/><circle cx="12" cy="12" r="10"/></svg>
+                        <span id="current-language">english</span>
+                    </button>
+
+                    <div class="select-menu close-mode" id="select-menu">
+                        <button class="language-item" data-language="en">english</button>
+                        <button class="language-item" data-language="ru">russian</button>
+                        <button class="language-item" data-language="go">code go</button>
+                    </div>
+                </div>
             </div>
 
             <div class="counter hidden" id="counter"></div>
             <div class="text" id="text"></div>
             <div id="generate">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                        width="40" height="40"
-                        viewBox="0 0 24 24" fill="none"
-                        stroke="oldlace" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round"
-                        opacity="0.3">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                    <path d="M3 3v5h5"/>
-                </svg>
+                <img src="../assets/images/generate.svg" alt="generate">
             </div>
         </div>
 
